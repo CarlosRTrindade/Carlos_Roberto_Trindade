@@ -1,0 +1,68 @@
+#include <stdio.h>
+
+#define TAMANHO 10
+#define NAVIO 3
+
+void inicializarTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            tabuleiro[i][j] = 0; // Preenche com água
+        }
+    }
+}
+
+int podePosicionar(int tabuleiro[TAMANHO][TAMANHO], int linha, int coluna, int direcao) {
+    for (int i = 0; i < NAVIO; i++) {
+        int novaLinha = linha, novaColuna = coluna;
+        
+        if (direcao == 0) novaLinha += i;        // Vertical
+        else if (direcao == 1) novaColuna += i;  // Horizontal
+        else if (direcao == 2) { novaLinha += i; novaColuna += i; }   // Diagonal ↘
+        else { novaLinha += i; novaColuna -= i; } // Diagonal ↙
+
+        if (novaLinha >= TAMANHO || novaColuna >= TAMANHO || novaColuna < 0 || tabuleiro[novaLinha][novaColuna] == 3) {
+            return 0; // Fora dos limites ou sobreposição
+        }
+    }
+    return 1;
+}
+
+void posicionarNavio(int tabuleiro[TAMANHO][TAMANHO], int linha, int coluna, int direcao) {
+    if (podePosicionar(tabuleiro, linha, coluna, direcao)) {
+        for (int i = 0; i < NAVIO; i++) {
+            int novaLinha = linha, novaColuna = coluna;
+            
+            if (direcao == 0) novaLinha += i;        // Vertical
+            else if (direcao == 1) novaColuna += i;  // Horizontal
+            else if (direcao == 2) { novaLinha += i; novaColuna += i; }   // Diagonal ↘
+            else { novaLinha += i; novaColuna -= i; } // Diagonal ↙
+
+            tabuleiro[novaLinha][novaColuna] = 3; // Posiciona o navio
+        }
+    }
+}
+
+void exibirTabuleiro(int tabuleiro[TAMANHO][TAMANHO]) {
+    printf("Tabuleiro de Batalha Naval:\n");
+    for (int i = 0; i < TAMANHO; i++) {
+        for (int j = 0; j < TAMANHO; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int tabuleiro[TAMANHO][TAMANHO];
+    
+    inicializarTabuleiro(tabuleiro);
+
+    // Posições fixas para os navios
+    posicionarNavio(tabuleiro, 2, 4, 1); // Horizontal
+    posicionarNavio(tabuleiro, 5, 7, 0); // Vertical
+    posicionarNavio(tabuleiro, 1, 1, 2); // Diagonal ↘
+    posicionarNavio(tabuleiro, 8, 6, 3); // Diagonal ↙
+
+    exibirTabuleiro(tabuleiro);
+    return 0;
+}
