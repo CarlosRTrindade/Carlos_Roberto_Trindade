@@ -1,0 +1,88 @@
+#include <stdio.h>
+
+// Definição da estrutura de uma carta do jogo
+typedef struct {
+    char nomePais[50];
+    int populacao;
+    float area;
+    float pib;
+    float densidade;
+} Carta;
+
+// Função para calcular a densidade demográfica
+void calcularDensidade(Carta *c) {
+    c->densidade = c->populacao / c->area;
+}
+
+// Função para escolher atributos
+int escolherAtributo(int escolhido) {
+    int opcao;
+    printf("Escolha um atributo para comparar:\n");
+    printf("1 - População\n");
+    printf("2 - Área\n");
+    printf("3 - PIB\n");
+    printf("4 - Densidade Demográfica\n");
+    printf("Opção: ");
+    scanf("%d", &opcao);
+
+    // Verifica se o atributo já foi escolhido
+    while (opcao == escolhido || opcao < 1 || opcao > 4) {
+        printf("Opção inválida ou já escolhida. Escolha novamente: ");
+        scanf("%d", &opcao);
+    }
+    return opcao;
+}
+
+// Função para comparar cartas
+void compararCartas(Carta c1, Carta c2, int atributo1, int atributo2) {
+    float valor1, valor2, soma1 = 0, soma2 = 0;
+    char *atributoNome;
+
+    // Comparação do primeiro atributo
+    switch (atributo1) {
+        case 1: valor1 = c1.populacao; valor2 = c2.populacao; atributoNome = "População"; break;
+        case 2: valor1 = c1.area; valor2 = c2.area; atributoNome = "Área"; break;
+        case 3: valor1 = c1.pib; valor2 = c2.pib; atributoNome = "PIB"; break;
+        case 4: valor1 = c1.densidade; valor2 = c2.densidade; atributoNome = "Densidade Demográfica"; break;
+    }
+
+    printf("\nComparação de %s:\n", atributoNome);
+    printf("%s: %.2f | %s: %.2f\n", c1.nomePais, valor1, c2.nomePais, valor2);
+    soma1 += (atributo1 == 4) ? -valor1 : valor1;
+    soma2 += (atributo1 == 4) ? -valor2 : valor2;
+
+    // Comparação do segundo atributo
+    switch (atributo2) {
+        case 1: valor1 = c1.populacao; valor2 = c2.populacao; atributoNome = "População"; break;
+        case 2: valor1 = c1.area; valor2 = c2.area; atributoNome = "Área"; break;
+        case 3: valor1 = c1.pib; valor2 = c2.pib; atributoNome = "PIB"; break;
+        case 4: valor1 = c1.densidade; valor2 = c2.densidade; atributoNome = "Densidade Demográfica"; break;
+    }
+
+    printf("\nComparação de %s:\n", atributoNome);
+    printf("%s: %.2f | %s: %.2f\n", c1.nomePais, valor1, c2.nomePais, valor2);
+    soma1 += (atributo2 == 4) ? -valor1 : valor1;
+    soma2 += (atributo2 == 4) ? -valor2 : valor2;
+
+    // Resultado final
+    printf("\nSoma dos atributos:\n%s: %.2f | %s: %.2f\n", c1.nomePais, soma1, c2.nomePais, soma2);
+    printf((soma1 == soma2) ? "\nEmpate!\n" : (soma1 > soma2) ? "\n%s venceu!\n" : "\n%s venceu!\n", (soma1 > soma2) ? c1.nomePais : c2.nomePais);
+}
+
+int main() {
+    Carta c1 = {"Brasil", 214000000, 8515767, 1440, 0};
+    Carta c2 = {"Estados Unidos", 331000000, 9834000, 23000, 0};
+
+    // Calcula a densidade populacional das cartas
+    calcularDensidade(&c1);
+    calcularDensidade(&c2);
+
+    printf("Super Trunfo: Comparação de Cartas de Países!\n");
+
+    int atributo1 = escolherAtributo(0);
+    int atributo2 = escolherAtributo(atributo1);
+
+    compararCartas(c1, c2, atributo1, atributo2);
+
+    return 0;
+}
